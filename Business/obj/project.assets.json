@@ -2274,6 +2274,33 @@
         "runtime": {
           "bin/placeholder/Core.dll": {}
         }
+      },
+      "DataAccess/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Core": "1.0.0",
+          "Entities": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DataAccess.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataAccess.dll": {}
+        }
+      },
+      "Entities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "dependencies": {
+          "Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Entities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Entities.dll": {}
+        }
       }
     }
   },
@@ -7685,6 +7712,16 @@
       "type": "project",
       "path": "../Core/Core.csproj",
       "msbuildProject": "../Core/Core.csproj"
+    },
+    "DataAccess/1.0.0": {
+      "type": "project",
+      "path": "../DataAccess/DataAccess.csproj",
+      "msbuildProject": "../DataAccess/DataAccess.csproj"
+    },
+    "Entities/1.0.0": {
+      "type": "project",
+      "path": "../Entities/Entities.csproj",
+      "msbuildProject": "../Entities/Entities.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -7693,6 +7730,7 @@
       "Autofac.Extensions.DependencyInjection >= 7.1.0",
       "Autofac.Extras.DynamicProxy >= 6.0.0",
       "Core >= 1.0.0",
+      "DataAccess >= 1.0.0",
       "FluentValidation >= 11.0.2",
       "Microsoft.AspNetCore.Http.Abstractions >= 2.2.0",
       "Microsoft.Extensions.DependencyInjection >= 5.0.2"
@@ -7732,6 +7770,9 @@
           "projectReferences": {
             "C:\\Users\\ENGIN\\source\\repos\\SYS\\Core\\Core.csproj": {
               "projectPath": "C:\\Users\\ENGIN\\source\\repos\\SYS\\Core\\Core.csproj"
+            },
+            "C:\\Users\\ENGIN\\source\\repos\\SYS\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Users\\ENGIN\\source\\repos\\SYS\\DataAccess\\DataAccess.csproj"
             }
           }
         }

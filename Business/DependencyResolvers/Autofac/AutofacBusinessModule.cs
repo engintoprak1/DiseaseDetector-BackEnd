@@ -2,6 +2,8 @@
 using Autofac.Extras.DynamicProxy;
 using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
+using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -9,8 +11,11 @@ namespace Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterType<EfCreditCard>().As<ICreditCardDal>().SingleInstance();
-
+            builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
+            builder.RegisterType<EfQuestionDal>().As<IQuestionDal>().SingleInstance();
+            builder.RegisterType<EfPoliclinicDal>().As<IPoliclinicDal>().SingleInstance();
+            builder.RegisterType<EfHospitalDal>().As<IHospitalDal>().SingleInstance();
+            builder.RegisterType<EfAnswerDal>().As<IAnswerDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
