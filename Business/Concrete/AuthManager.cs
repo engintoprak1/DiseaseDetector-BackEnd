@@ -7,9 +7,6 @@ using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
 using Core.Utilities.Security.JWT;
 using Entities.Dtos.User;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Business.Concrete
 {
@@ -24,55 +21,55 @@ namespace Business.Concrete
             _tokenHelper = tokenHelper;
         }
 
-        [ValidationAspect(typeof(UserForRegisterValidator))]
-        public IResult Register(UserForRegisterDto userForRegisterDto)
+        
+        public IDataResult<UserLoginResultDto> Login(UserForLoginDto userForLoginDto)
         {
+            var user = _userService.GetByIdentificationNumber(userForLoginDto.IdentificationNumber);
+            if (user.Data == null)
+            {
+                return new ErrorDataResult<UserLoginResultDto>(user.Message);
+            }
+
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, user.Data.PasswordHash, user.Data.PasswordSalt))
+            {
+                return new ErrorDataResult<UserLoginResultDto>(Messages.PasswordIncorrect);
+            }
+
+            var token = CreateAccessToken(user.Data);
+            UserLoginResultDto result = new UserLoginResultDto { AccessToken = token.Token, TokenExpires = token.Expiration, Name = user.Data.Name, Surname = user.Data.Surname, Gsm = user.Data.Gsm, IdentificationNumber = user.Data.IdentificationNumber };
+            return new SuccessDataResult<UserLoginResultDto>(result);
+        }
+
+        [ValidationAspect(typeof(UserForRegisterValidator))]
+        public IDataResult<UserRegisterDto> Register(UserForRegisterDto userForRegisterDto)
+        {
+            var businessRules = BusinessRules.Run(UserShouldNotExistWithIdentity(userForRegisterDto.IdentificationNumber), UserShouldNotExistWithGsm(userForRegisterDto.Gsm));
+            if (businessRules != null) return new ErrorDataResult<UserRegisterDto>(businessRules.Message);
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
             var user = new User
             {
+                IdentificationNumber = userForRegisterDto.IdentificationNumber,
                 Name = userForRegisterDto.Name,
                 Surname = userForRegisterDto.Surname,
                 Gsm = userForRegisterDto.Gsm,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt,
+                PasswordSalt = passwordSalt
             };
-
-            var businessRules = BusinessRules.Run(UserShouldNotExistWithGsm(userForRegisterDto.Gsm));
-
-            if (businessRules != null)
-            {
-                return businessRules;
-            }
-
             _userService.Add(user);
-            return new SuccessDataResult<User>(user, Messages.UserRegistered);
+            UserRegisterDto result = new UserRegisterDto() { Gsm = user.Gsm, IdentificationNumber = user.IdentificationNumber, Name = user.Name, Surname = user.Surname};
+            return new SuccessDataResult<UserRegisterDto>(result, Messages.UserRegistered);
         }
 
-        public IDataResult<User> Login(UserForLoginDto userForLoginDto)
-        {
-            var userToCheck = _userService.GetByIdentificationNumber(userForLoginDto.IdentificationNumber);
-            if (userToCheck.Data == null)
-            {
-                return new ErrorDataResult<User>(userToCheck.Message);
-            }
-
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
-            {
-                return new ErrorDataResult<User>(Messages.PasswordIncorrect);
-            }
-
-            return new SuccessDataResult<User>(userToCheck.Data);
-        }
-
-        public IDataResult<UserLoginResultDto> CreateAccessToken(User user)
+        public AccessToken CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user.Id);
-            var accessToken = _tokenHelper.CreateToken(user, claims.Data);
-            UserLoginResultDto result = new UserLoginResultDto { AccessToken = accessToken, Name = user.Name, Surname = user.Surname, Gsm = user.Gsm, IdentificationNumber = user.IdentificationNumber };
-            return new SuccessDataResult<UserLoginResultDto>(result, Messages.AccessTokenCreated);
+            return _tokenHelper.CreateToken(user, claims.Data);
         }
 
+        #region private methods
+
+        #endregion
         private IResult UserShouldNotExistWithGsm(string gsm)
         {
             if (_userService.GetByGsm(gsm).Success)
@@ -81,6 +78,17 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
+
+        private IResult UserShouldNotExistWithIdentity(string idNumber)
+        {
+            if (_userService.GetByIdentificationNumber(idNumber).Success)
+            {
+                return new ErrorResult(Messages.UserAlreadyExistWithIdentity);
+            }
+            return new SuccessResult();
+        }
+
+
 
 
 

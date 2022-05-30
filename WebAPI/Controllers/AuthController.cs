@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : ControllerBase
     {
         private IAuthService _authService;
 
@@ -20,21 +20,18 @@ namespace WebAPI.Controllers
             _authService = authService;
         }
 
-        [HttpPost("login")]
+        [HttpPost("/login")]
         public ActionResult Login(UserForLoginDto userForLoginDto)
         {
-            var userToLogin = _authService.Login(userForLoginDto);
-            if (!userToLogin.Success)
-            {
-                return BadRequest(userToLogin.Message);
-            }
+            var result = _authService.Login(userForLoginDto);
+            return StatusCode(result.Success ? 200 : 400, result);
+        }
 
-            var token = _authService.CreateAccessToken(userToLogin.Data);
-            if (token.Success)
-            {
-                return Ok(token);
-            }
-            return BadRequest(token);
+        [HttpPost("/register")]
+        public ActionResult Register(UserForRegisterDto userForRegisterDto)
+        {
+            var result = _authService.Register(userForRegisterDto);
+            return StatusCode(result.Success ? 200: 400, result);
         }
     }
 }

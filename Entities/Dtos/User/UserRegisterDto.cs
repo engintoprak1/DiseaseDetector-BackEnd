@@ -1,13 +1,12 @@
 ﻿using Core.Entities;
-using Core.Utilities.Security.JWT;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Entities.Dtos.User
 {
-    public class UserLoginResultDto : IDto
+    public class UserRegisterDto : IDto
     {
-        public string AccessToken { get; set; }
-        public DateTime TokenExpires { get; set; }
         public string IdentificationNumber { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }

@@ -28,6 +28,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<EfPoliclinicDal>().As<IPoliclinicDal>().SingleInstance();
             builder.RegisterType<EfHospitalDal>().As<IHospitalDal>().SingleInstance();
             builder.RegisterType<EfAnswerDal>().As<IAnswerDal>().SingleInstance();
+            builder.RegisterType<EfUserQuestionAnswerDal>().As<IUserQuestionAnswerDal>().SingleInstance();
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

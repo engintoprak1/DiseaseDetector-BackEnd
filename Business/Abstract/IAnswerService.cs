@@ -9,5 +9,7 @@ namespace Business.Abstract
     public interface IAnswerService
     {
         IResult Add(Answer answer);
+
+        IDataResult<List<Answer>> GetAnswersWithQuestionId(int id);
     }
 }

@@ -27,5 +27,6 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<Answer> Answers { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
+        public DbSet<UserQuestionAnswer> UserQuestionAnswers { get; set; }
     }
 }
