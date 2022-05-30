@@ -51,25 +51,25 @@ namespace Business.Concrete
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
-            var userToCheck = _userService.GetByIdentificationNumber(userForLoginDto.IdentificationNumber).Data;
-            if (userToCheck == null)
+            var userToCheck = _userService.GetByIdentificationNumber(userForLoginDto.IdentificationNumber);
+            if (userToCheck.Data == null)
             {
-                return new ErrorDataResult<User>(Messages.UserNotFound);
+                return new ErrorDataResult<User>(userToCheck.Message);
             }
 
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.Data.PasswordHash, userToCheck.Data.PasswordSalt))
             {
                 return new ErrorDataResult<User>(Messages.PasswordIncorrect);
             }
 
-            return new SuccessDataResult<User>(userToCheck);
+            return new SuccessDataResult<User>(userToCheck.Data);
         }
 
         public IDataResult<UserLoginResultDto> CreateAccessToken(User user)
         {
-            var claims = _userService.GetClaims(user);
+            var claims = _userService.GetClaims(user.Id);
             var accessToken = _tokenHelper.CreateToken(user, claims.Data);
-            UserLoginResultDto result = new UserLoginResultDto { AccessToken = accessToken, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, Address = user.Address, MobilePhone = user.MobilePhone };
+            UserLoginResultDto result = new UserLoginResultDto { AccessToken = accessToken, Name = user.Name, Surname = user.Surname, Gsm = user.Gsm, IdentificationNumber = user.IdentificationNumber };
             return new SuccessDataResult<UserLoginResultDto>(result, Messages.AccessTokenCreated);
         }
 

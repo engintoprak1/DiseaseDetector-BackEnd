@@ -9,9 +9,9 @@ namespace Business.Abstract
     public interface IUserService
     {
         IResult Add(User user);
-
         IDataResult<User> GetByGsm(string gsm);
-
         IDataResult<User> GetByIdentificationNumber(string idNumber);
+        IDataResult<List<OperationClaim>> GetClaims(int userId);
+        IDataResult<User> GetById(int id);
     }
 }

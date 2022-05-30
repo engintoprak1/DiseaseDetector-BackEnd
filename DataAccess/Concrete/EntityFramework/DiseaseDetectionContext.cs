@@ -20,15 +20,12 @@ namespace DataAccess.Concrete.EntityFramework
         }
 
         public DbSet<User> Users { get; set; }
-
         public DbSet<Question> Questions { get; set; }
-
         public DbSet<Policlinic> Policlinics { get; set; }
-
         public DbSet<Hospital> Hospitals { get; set; }
-
         public DbSet<BodyPart> BodyParts { get; set; }
-
         public DbSet<Answer> Answers { get; set; }
+        public DbSet<OperationClaim> OperationClaims { get; set; }
+        public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
     }
 }
