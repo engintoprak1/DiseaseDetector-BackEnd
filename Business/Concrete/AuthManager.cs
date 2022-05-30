@@ -67,7 +67,10 @@ namespace Business.Concrete
 
         public IDataResult<UserLoginResultDto> CreateAccessToken(User user)
         {
-            throw new NotImplementedException();
+            var claims = _userService.GetClaims(user);
+            var accessToken = _tokenHelper.CreateToken(user, claims.Data);
+            UserLoginResultDto result = new UserLoginResultDto { AccessToken = accessToken, FirstName = user.FirstName, LastName = user.LastName, Email = user.Email, Address = user.Address, MobilePhone = user.MobilePhone };
+            return new SuccessDataResult<UserLoginResultDto>(result, Messages.AccessTokenCreated);
         }
 
         private IResult UserShouldNotExistWithGsm(string gsm)

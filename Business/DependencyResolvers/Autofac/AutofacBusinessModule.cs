@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extras.DynamicProxy;
+using Business.Abstract;
+using Business.Concrete;
 using Castle.DynamicProxy;
 using Core.Utilities.Interceptors;
 using DataAccess.Abstract;
@@ -11,6 +13,13 @@ namespace Business.DependencyResolvers.Autofac
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
+            builder.RegisterType<UserManager>().As<IUserService>().SingleInstance();
+            builder.RegisterType<QuestionManager>().As<IQuestionService>().SingleInstance();
+            builder.RegisterType<PoliclinicManager>().As<IPoliclinicService>().SingleInstance();
+            builder.RegisterType<HospitalManager>().As<IHospitalService>().SingleInstance();
+            builder.RegisterType<AnswerManager>().As<IAnswerService>().SingleInstance();
+
             builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
             builder.RegisterType<EfQuestionDal>().As<IQuestionDal>().SingleInstance();
             builder.RegisterType<EfPoliclinicDal>().As<IPoliclinicDal>().SingleInstance();
