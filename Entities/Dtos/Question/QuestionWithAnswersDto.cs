@@ -6,6 +6,7 @@ namespace Entities.Dtos.Question
 {
     public class QuestionWithAnswersDto
     {
+        public int Id { get; set; }
         public string Question { get; set; }
         public List<AnswerWithSelectionDto> Answers { get; set; }
     }

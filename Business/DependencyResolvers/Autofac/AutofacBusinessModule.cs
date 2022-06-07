@@ -22,6 +22,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<PoliclinicManager>().As<IPoliclinicService>().SingleInstance();
             builder.RegisterType<HospitalManager>().As<IHospitalService>().SingleInstance();
             builder.RegisterType<AnswerManager>().As<IAnswerService>().SingleInstance();
+            builder.RegisterType<ReportManager>().As<IReportService>().SingleInstance();
 
             builder.RegisterType<EfUserDal>().As<IUserDal>().SingleInstance();
             builder.RegisterType<EfQuestionDal>().As<IQuestionDal>().SingleInstance();

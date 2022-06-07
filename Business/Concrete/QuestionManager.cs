@@ -26,10 +26,30 @@ namespace Business.Concrete
             _questionDal = questionDal;
             _userQuestionAnswerDal = userQuestionAnswerDal;
         }
-        [Authentication]
         public IDataResult<List<QuestionWithAnswersDto>> GetAllQuestions()
         {
             var result = _questionDal.GetAllQuestionsWithAnswers();
+            if (result == null)
+            {
+                return new ErrorDataResult<List<QuestionWithAnswersDto>>();
+            }
+            return new SuccessDataResult<List<QuestionWithAnswersDto>>(result);
+        }
+
+        public IDataResult<List<QuestionWithAnswersDto>> GetResumeQuestions()
+        {
+            var result = _questionDal.GetResumeQuestionsWithAnswers();
+            if (result == null)
+            {
+                return new ErrorDataResult<List<QuestionWithAnswersDto>>();
+            }
+            return new SuccessDataResult<List<QuestionWithAnswersDto>>(result);
+        }
+
+        [Authentication]
+        public IDataResult<List<QuestionWithAnswersDto>> GetPregnancyQuestions()
+        {
+            var result = _questionDal.GetPregnancyQuestionsWithAnswers();
             if (result == null)
             {
                 return new ErrorDataResult<List<QuestionWithAnswersDto>>();

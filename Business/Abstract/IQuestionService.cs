@@ -10,6 +10,9 @@ namespace Business.Abstract
     public interface IQuestionService
     {
         IDataResult<List<QuestionWithAnswersDto>> GetAllQuestions();
-        IResult SaveQuestionAnswers(List<QuestionWithAnswersDto> questions);
+
+        IDataResult<List<QuestionWithAnswersDto>> GetPregnancyQuestions();
+
+        IDataResult<List<QuestionWithAnswersDto>> GetResumeQuestions();
     }
 }
